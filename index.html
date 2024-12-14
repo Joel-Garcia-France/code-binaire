@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Décimal en Binaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .card {
+            width: 100px;
+            height: 150px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .card.front {
+            background-color: green;
+        }
+        .card.back {
+            background-color: red;
+        }
+        .binary-value {
+            margin-top: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .total-decimal {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-10">
+    <!-- Titre principal -->
+    <h1 class="text-3xl font-bold mb-10">Conversion Décimal en Binaire</h1>
+
+    <!-- Conteneur principal -->
+    <div class="flex items-start">
+        <!-- Total Décimal -->
+        <div id="total-decimal" class="total-decimal text-gray-700">Total: 31</div>
+
+        <!-- Grille des cartes -->
+        <div class="grid grid-cols-5 gap-6">
+            <!-- Les cartes sont générées dynamiquement par JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Valeurs des cartes
+        const cardValues = [16, 8, 4, 2, 1];
+        // Code binaire initial
+        const binaryCode = [1, 1, 1, 1, 1];
+
+        // Sélectionner la grille et le total
+        const grid = document.querySelector('.grid');
+        const totalDecimalDisplay = document.getElementById('total-decimal');
+
+        // Fonction pour recalculer le total décimal
+        function updateTotalDecimal() {
+            const total = cardValues.reduce((sum, value, index) => {
+                return sum + (binaryCode[index] === 1 ? value : 0);
+            }, 0);
+            totalDecimalDisplay.textContent = `Total: ${total}`;
+        }
+
+        // Fonction pour créer les cartes
+        function createCards() {
+            cardValues.forEach((value, index) => {
+                // Créer un conteneur pour la carte et le texte binaire
+                const container = document.createElement('div');
+                container.className = 'card-container';
+
+                // Créer une carte
+                const card = document.createElement('div');
+                card.className = 'card front';
+                card.textContent = value;
+
+                // Créer l'élément pour le code binaire
+                const binaryText = document.createElement('div');
+                binaryText.className = 'binary-value text-green-500';
+                binaryText.textContent = binaryCode[index];
+
+                // Ajouter un gestionnaire de clic à la carte
+                card.addEventListener('click', () => {
+                    // Inverser la face de la carte
+                    if (card.classList.contains('front')) {
+                        card.classList.remove('front');
+                        card.classList.add('back');
+                        card.textContent = ''; // Dos de la carte vide
+                        binaryCode[index] = 0; // Mettre à jour le code binaire
+                        binaryText.textContent = '0';
+                        binaryText.className = 'binary-value text-red-500';
+                    } else {
+                        card.classList.remove('back');
+                        card.classList.add('front');
+                        card.textContent = value; // Montrer la valeur sur la face
+                        binaryCode[index] = 1; // Mettre à jour le code binaire
+                        binaryText.textContent = '1';
+                        binaryText.className = 'binary-value text-green-500';
+                    }
+                    // Mettre à jour le total décimal
+                    updateTotalDecimal();
+                });
+
+                // Ajouter la carte et le code binaire au conteneur
+                container.appendChild(card);
+                container.appendChild(binaryText);
+
+                // Ajouter le conteneur à la grille
+                grid.appendChild(container);
+            });
+        }
+
+        // Initialisation
+        createCards();
+        updateTotalDecimal();
+    </script>
+</body>
+</html>
